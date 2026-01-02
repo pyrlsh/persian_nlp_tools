@@ -10,6 +10,33 @@ It includes modules for:
 - **Extractive text summarization** using Parsivar
 
 The goal is to make it easy to compare Persian documents and generate concise summaries.
+---
+
+## ⚠️ Important Note on Text Length (Critical)
+
+> **This toolkit is intended ONLY for medium to long Persian texts.**
+
+### ❌ Do NOT use for:
+
+* Single sentences
+* Headlines
+* Short news snippets
+* Tweets or captions
+
+### ✅ Recommended minimum:
+
+* **Similarity**: 2–3 paragraphs per document
+* **Summarization**: 10–15 sentences or more
+
+### Why?
+
+TF-IDF and cosine similarity depend on **term distribution statistics**.
+Short texts:
+
+* Lack vocabulary diversity
+* Produce unstable TF-IDF weights
+* Result in misleading similarity scores
+* Fail in extractive summarization
 
 ---
 
@@ -83,7 +110,17 @@ print(f"Cosine similarity: {similarity}")
 ```python
 from persian_text_summarizer import TextSummarizationPipeline
 
-input_text = """سینما یکی از مهم‌ترین هنرهای قرن بیستم است..."""
+input_text ="""
+سینما یکی از مهم‌ترین پدیده‌های فرهنگی قرن بیستم محسوب می‌شود که
+توانسته است مرزهای جغرافیایی و زبانی را درنوردد. این هنر-صنعت با
+ترکیب تصویر، صدا، روایت و فناوری، شکل جدیدی از داستان‌گویی را
+به جهان معرفی کرده است.
+
+از نخستین نمایش‌های عمومی تصاویر متحرک در اواخر قرن نوزدهم تا
+تولید فیلم‌های دیجیتال با جلوه‌های ویژه پیچیده، سینما همواره
+در حال تحول بوده است. این تحولات نه‌تنها بر شیوه تولید فیلم،
+بلکه بر نحوه دریافت و تفسیر مخاطبان نیز تأثیر گذاشته‌اند.
+"""
 pipeline = TextSummarizationPipeline(input_text, ratio=0.3, sentence_limit=5)
 pipeline.process_and_summarize()
 ```
@@ -95,8 +132,34 @@ pipeline.process_and_summarize()
 ```python
 from persian_text_similarity import TextSimilarity
 
-text1 = "تاریخ سینما: از دوران صامت تا فیلم‌های بلاک‌باستر امروزی..."
-text2 = "تاریخچه سینما: از فیلم‌های صامت تا بلاک‌باسترهای مدرن..."
+text1 = """
+تاریخ سینما به اواخر قرن نوزدهم بازمی‌گردد، زمانی که برادران لومیر
+نخستین نمایش عمومی تصاویر متحرک را برگزار کردند. در این دوران،
+فیلم‌ها بسیار کوتاه و بدون صدا بودند و بیشتر جنبه سرگرمی داشتند.
+
+با گذشت زمان، فیلم‌سازان به ظرفیت‌های روایی این رسانه پی بردند.
+فیلم‌های صامت به داستان‌های پیچیده‌تری پرداختند و کارگردانانی
+مانند چارلی چاپلین توانستند احساسات انسانی را بدون دیالوگ منتقل کنند.
+
+ورود صدا به سینما نقطه عطفی در تاریخ این هنر بود. از آن پس،
+سینما به یکی از تأثیرگذارترین رسانه‌های فرهنگی و اجتماعی جهان
+تبدیل شد و نقش مهمی در شکل‌دهی افکار عمومی ایفا کرد.
+"""
+
+text2 = """
+سینما از بدو پیدایش خود تاکنون مسیر طولانی و پرفرازونشیبی را طی کرده است.
+در ابتدا، فیلم‌ها به صورت صامت و کوتاه تولید می‌شدند و بیشتر جنبه
+تفریحی داشتند. اما به‌تدریج، سینما به رسانه‌ای جدی برای روایت
+داستان‌های انسانی و اجتماعی تبدیل شد.
+
+پیشرفت فناوری، به‌ویژه ورود صدا و سپس تصویر رنگی، امکانات بیانی
+سینما را گسترش داد. در دهه‌های اخیر، جلوه‌های ویژه دیجیتال و
+فناوری‌های نوین، سینما را وارد مرحله‌ای تازه کرده‌اند.
+
+امروزه سینما نه‌تنها یک صنعت بزرگ اقتصادی است، بلکه یکی از مهم‌ترین
+ابزارهای فرهنگی در جهان معاصر به شمار می‌رود.
+"""
+
 
 similarity_calc = TextSimilarity(text1, text2)
 similarity = similarity_calc.process_and_calculate_similarity()
